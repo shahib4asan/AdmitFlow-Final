@@ -8,26 +8,28 @@ export async function POST(req: Request) {
 
   const body = await req.json()
   const { action, id, ...data } = body
+  const userId = session.user.id
 
   try {
     if (action === 'create') {
-      const uni = await createUniversity({ ...data, userId: session.user.id })
+      const uni = await createUniversity(userId, data)
+
       // Create default document stubs
       const DOC_TYPES = ['sop', 'cv', 'ielts', 'transcript', 'passport', 'lor1', 'lor2']
       await sql`
-        INSERT INTO documents (university_id, type, completed, file_url)
-        SELECT ${uni.id}, unnest(${DOC_TYPES}::text[]), false, null
+        INSERT INTO documents (university_id, user_id, name, type, status)
+        SELECT ${uni.id}, ${userId}, unnest(${DOC_TYPES}::text[]), unnest(${DOC_TYPES}::text[]), 'pending'
       `
       return NextResponse.json({ data: uni })
     }
 
     if (action === 'update') {
-      const uni = await updateUniversity(id, session.user.id, data)
+      const uni = await updateUniversity(id, userId, data)
       return NextResponse.json({ data: uni })
     }
 
     if (action === 'delete') {
-      await deleteUniversity(id, session.user.id)
+      await deleteUniversity(id, userId)
       return NextResponse.json({ success: true })
     }
 
