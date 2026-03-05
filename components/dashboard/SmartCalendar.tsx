@@ -21,12 +21,14 @@ const TYPE_META: Record<EventType, { color: string; bg: string; icon: string; la
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
-const SAMPLE_EVENTS: CalEvent[] = [
-  { id: '1', date: '', label: 'UBC Application Deadline', type: 'deadline' },
-  { id: '2', date: '', label: 'IELTS Test',               type: 'exam' },
-  { id: '3', date: '', label: 'Chevening Scholarship',    type: 'scholarship' },
-  { id: '4', date: '', label: 'US Visa Interview',         type: 'visa' },
-].map((e, i) => {
+const SAMPLE_EVENTS: CalEvent[] = (
+  [
+    { id: '1', date: '', label: 'UBC Application Deadline', type: 'deadline'    as EventType },
+    { id: '2', date: '', label: 'IELTS Test',               type: 'exam'        as EventType },
+    { id: '3', date: '', label: 'Chevening Scholarship',    type: 'scholarship' as EventType },
+    { id: '4', date: '', label: 'US Visa Interview',        type: 'visa'        as EventType },
+  ] as CalEvent[]
+).map((e, i) => {
   const d = new Date()
   d.setDate(d.getDate() + [5, 12, 18, 24][i])
   return { ...e, date: d.toISOString().split('T')[0] }
