@@ -1,0 +1,72 @@
+/* 
+  ─────────────────────────────────────────────────────────────────
+  AdmitFlow — Unified Page Background
+  
+  HOW TO USE:
+  Wrap your entire page in a <div className="af-page"> in your 
+  layout.tsx or page.tsx:
+
+    <div className="af-page">
+      <Navbar />
+      <Hero />
+      <Timeline />
+      <ProblemSection />
+      <Features />
+      <SocialProof />
+      <Pricing />
+      <FAQAndCTA />
+      <CTA />
+      <Footer />
+    </div>
+
+  Then in every section component, REMOVE the background prop 
+  (set it to transparent or just delete it entirely).
+  The grid, orbs, and all decorative elements stay — only the 
+  solid background colors are removed from individual sections.
+  ─────────────────────────────────────────────────────────────────
+*/
+
+/* Paste into your globals.css */
+
+/* ── Unified page canvas ── */
+.af-page {
+  background: #080a0f;
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+}
+
+/* ── Global dot grid (one layer, full page) ── */
+.af-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── All sections become transparent ── */
+.af-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Section dividers: soft radial fade instead of hard lines ── */
+.af-page section + section::before,
+.af-page div[id] + section::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 30%,
+    rgba(255, 255, 255, 0.05) 70%,
+    transparent 100%
+  );
+  margin: 0 10%;
+}
