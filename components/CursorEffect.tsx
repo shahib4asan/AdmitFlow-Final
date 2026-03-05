@@ -4,9 +4,13 @@ import { useEffect } from 'react'
 
 export default function CursorEffect() {
   useEffect(() => {
-    const dot    = document.getElementById('af-cursor-dot')
-    const bubble = document.getElementById('af-cursor-bubble')
+    const dot    = document.getElementById('af-cursor-dot')    as HTMLElement | null
+    const bubble = document.getElementById('af-cursor-bubble') as HTMLElement | null
     if (!dot || !bubble) return
+
+    // Non-null references safe to use inside closures
+    const d = dot
+    const b = bubble
 
     let mouseX = 0, mouseY = 0
     let bubbleX = 0, bubbleY = 0
@@ -16,8 +20,8 @@ export default function CursorEffect() {
     const onMove = (e: MouseEvent) => {
       mouseX = e.clientX
       mouseY = e.clientY
-      dot.style.left = mouseX + 'px'
-      dot.style.top  = mouseY + 'px'
+      d.style.left = mouseX + 'px'
+      d.style.top  = mouseY + 'px'
     }
 
     // Bubble lerps behind
@@ -25,8 +29,8 @@ export default function CursorEffect() {
     function animate() {
       bubbleX = lerp(bubbleX, mouseX, 0.12)
       bubbleY = lerp(bubbleY, mouseY, 0.12)
-      bubble.style.left = bubbleX + 'px'
-      bubble.style.top  = bubbleY + 'px'
+      b.style.left = bubbleX + 'px'
+      b.style.top  = bubbleY + 'px'
       raf = requestAnimationFrame(animate)
     }
     animate()
@@ -36,8 +40,8 @@ export default function CursorEffect() {
     function removeHover() { document.body.classList.remove('af-hovering') }
     function addClick()    { document.body.classList.add('af-clicking') }
     function removeClick() { document.body.classList.remove('af-clicking') }
-    function hide() { dot.style.opacity = '0'; bubble.style.opacity = '0' }
-    function show() { dot.style.opacity = '1'; bubble.style.opacity = '1' }
+    function hide() { d.style.opacity = '0'; b.style.opacity = '0' }
+    function show() { d.style.opacity = '1'; b.style.opacity = '1' }
 
     document.addEventListener('mousemove',  onMove)
     document.addEventListener('mousedown',  addClick)
